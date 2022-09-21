@@ -1,4 +1,9 @@
-<?php include 'header.php';?>
+<?php include 'header.php'; ?>
+<?php
+$sql = "SELECT *,movie.id AS movie_id, movie.name AS movie_name, genre.name AS genre_name FROM movie INNER JOIN genre ON movie.genre_id = genre.id";
+$movieRS = mysqli_query($conn, $sql);
+
+?>
 <div class="panel panel-primary">
     <div class="panel-heading">
         <h3 class="panel-title">Danh sách Phim</h3>
@@ -16,45 +21,21 @@
             </tr>
         </thead>
         <tbody>
-            <tr>
-                <td class="ct">1</td>
-                <td class="ct">
-                    <img src="image/b1.jpg" alt="" width="50px">
-                </td>
-                <td >Excape Plance</td>
-                <td >20/10/1995</td>
-                <td>Hàn động</td>
-                <td  align="center">
-                    <a href="edit-book.php" class="btn btn-xs btn-primary">Sửa</a>
-                    <a href="delete-book.php" class="btn btn-xs btn-danger" onclick="return confirm('Bạn có muốn xóa không');">Xóa</a>
-                </td>
-            </tr>
-            <tr>
-                <td class="ct">2</td>
-                <td class="ct">
-                    <img src="image/b2.jpg" alt="" width="50px">
-                </td>
-                <td >Vua bài</td>
-                <td >15/07/1996</td>
-                <td>Hàn động - hài</td>
-                <td  align="center">
-                    <a href="edit-book.php" class="btn btn-xs btn-primary">Sửa</a>
-                    <a href="delete-book.php" class="btn btn-xs btn-danger" onclick="return confirm('Bạn có muốn xóa không');">Xóa</a>
-                </td>
-            </tr>
-            <tr>
-                <td class="ct">3</td>
-                <td class="ct">
-                    <img src="image/b3.jpg" alt="" width="50px">
-                </td>
-                <td >Thần Điêu Đại Hiệp</td>
-                <td >112/08/1999</td>
-                <td>Liếm hiệp</td>
-                <td align="center">
-                    <a href="edit-book.php" class="btn btn-xs btn-primary">Sửa</a>
-                    <a href="delete-book.php" class="btn btn-xs btn-danger" onclick="return confirm('Bạn có muốn xóa không');">Xóa</a>
-                </td>
-            </tr>
+            <?php while ($movie = mysqli_fetch_assoc($movieRS)) : ?>
+                <tr>
+                    <td class="ct"><?php echo $movie['movie_id']; ?> </td>
+                    <td class="ct">
+                        <img src="<?php echo $movie['avatar']; ?>" alt="" width="50px">
+                    </td>
+                    <td><?php echo $movie['movie_name']; ?></td>
+                    <td><?php echo $movie['created_date']; ?></td>
+                    <td><?php echo $movie['genre_name']; ?></td>
+                    <td align="center">
+                        <a href="edit-book.php?id=<?php echo $movie['movie_id']; ?>" class="btn btn-xs btn-primary">Sửa</a>
+                        <a href="delete-movie.php?id=<?php echo $movie['movie_id']; ?>" class="btn btn-xs btn-danger" onclick="return confirm('Bạn có muốn xóa không');">Xóa</a>
+                    </td>
+                </tr>
+            <?php endwhile ?>
         </tbody>
     </table>
 </div>

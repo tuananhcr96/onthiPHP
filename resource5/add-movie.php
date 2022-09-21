@@ -1,8 +1,18 @@
 <?php include 'header.php'; ?>
-<?php 
-if(isset($_FILES['poster']) && $_FILES['poster']['name']){
-    $duongDanFile = ''
+<?php
+if (isset($_FILES['poster']) && $_FILES['poster']['name']) {
+    $duongDanFile = 'uploads/' . time() . $_FILES['poster']['name'];
+    move_uploaded_file($_FILES['poster']['tmp_name'], $duongDanFile);
+    $name = $_POST['name'];
+    $genre_id = $_POST['genre_id'];
+    $created_date = $_POST['created_date'];
+    $status = $_POST['status'];
+    $intro_text = $_POST['intro_text'];
+    $sql = "INSERT INTO movie(name,genre_id,created_date,status,intro_text,avatar) VALUES ('$name','$genre_id','$created_date','$status','$intro_text','$duongDanFile')";
+    mysqli_query($conn, $sql);
+    mysqli_connect_error();
 }
+$genreRS = mysqli_query($conn, "SELECT * FROM genre");
 
 ?>
 <div class="panel panel-primary">
@@ -19,9 +29,9 @@ if(isset($_FILES['poster']) && $_FILES['poster']['name']){
             <label class="" for="">Chọn thể loại</label><span>*</span>
             <select name="genre_id" class="form-control" required>
                 <option value="">--Chọn thể loại--</option>
-                <option value="">Hành động</option>
-                H<option value="">Hành động - hài</option>
-                H<option value="">Kiếm Hiệp</option>
+                <?php while ($genre = mysqli_fetch_assoc($genreRS)) : ?>
+                    <option value="<?php echo $genre['id']; ?>"><?php echo $genre['name']; ?></option>
+                <?php endwhile ?>
             </select>
         </div>
         <div class="form-group col-md-6">
